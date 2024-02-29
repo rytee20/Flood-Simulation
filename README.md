@@ -25,5 +25,3 @@
 ![Flood-Simulation-9](https://github.com/rytee20/Flood-Simulation/blob/main/Presentation/Flood-Simulation-9.png?raw=true)
 
 ![Flood-Simulation-10](https://github.com/rytee20/Flood-Simulation/blob/main/Presentation/Flood-Simulation-10.png?raw=true)
-
-![Flood-Simulation-11](https://github.com/rytee20/Flood-Simulation/blob/main/Presentation/Flood-Simulation-11.png?raw=true)
