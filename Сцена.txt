@@ -1,0 +1,100 @@
+package com.example.deluge3d;
+
+import javafx.scene.Camera;
+import javafx.scene.Group;
+import javafx.scene.PerspectiveCamera;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.transform.Rotate;
+import javafx.stage.Stage;
+import javafx.scene.shape.Box;
+import java.util.ArrayList;
+
+public class MyScene{
+	public int SquaresOnWidth ;
+	public int SquaresOnDepth ;
+	public int SquaresOnHeight;
+	private final int widthOfSquare;
+	private final int heightOfSquare;
+	private final int width;
+	private final int height;
+	private final int depth;
+
+	private ArrayList<Box> landscape;
+
+	public MyScene(Ground ground) {
+		SquaresOnWidth = Settings.SquaresOnWidth;
+		SquaresOnDepth = Settings.SquaresOnDepth;
+		SquaresOnHeight = ground.SquaresOnHeight;
+
+		height = Settings.heightOfScene;
+		width = Settings.widthOfScene;
+		depth = Settings.depthOfScene;
+		widthOfSquare = width / Settings.SquaresOnWidth;
+		heightOfSquare = ground.heightOfGroundCube;
+
+	}
+	public void DrawWater(Water water, Ground ground, Stage stage){
+		PhongMaterial blackMaterial = new PhongMaterial();
+		blackMaterial.setDiffuseColor(Color.GRAY);
+		blackMaterial.setSpecularColor(Color.GRAY);
+		ArrayList<Box> GroundBox= new ArrayList<>();
+		//земля
+		for (int i = 0;i<ground.SquaresOnWidth;i++) {
+			for (int j = 0; j < ground.SquaresOnDepth; j++) {
+				for (int k = 0; k < ground.SquaresOnHeight; k++) {
+					if (ground.cubs[i][j][k].isGround) {
+						Box box = new Box(widthOfSquare, heightOfSquare, widthOfSquare);
+						box.setTranslateX(i * widthOfSquare);
+						box.setTranslateZ(j * widthOfSquare);
+						box.setTranslateY(height - (k + 0.5) * heightOfSquare);
+						box.setMaterial(blackMaterial);
+						GroundBox.add(box);
+					}
+				}
+			}
+		}
+		//вода
+		PhongMaterial blueMaterial = new PhongMaterial();
+		blueMaterial.setDiffuseColor(Color.DARKBLUE);
+		blueMaterial.setSpecularColor(Color.BLUE);
+		//ArrayList<Box> WaterBox= new ArrayList<>();
+		for (int i = 0;i<SquaresOnWidth;i++) {
+			for (int j = 0; j < SquaresOnDepth; j++) {
+				if(water.columns[i][j].level>0) {
+					Box box1 = new Box(widthOfSquare, water.columns[i][j].level, widthOfSquare);
+					box1.setTranslateX(i * widthOfSquare);
+					box1.setTranslateZ(j * widthOfSquare);
+					box1.setTranslateY(height - ground.levelOfGround[i][j] - water.columns[i][j].level / 2);
+					box1.setMaterial(blueMaterial);
+					GroundBox.add(box1);
+				}
+			}
+		}
+		Camera camera = new PerspectiveCamera(true);
+		camera.setFarClip(50000.0);
+		camera.setTranslateZ(-1200);
+		camera.setTranslateY(-1200);
+		camera.setTranslateX(300);
+		camera.setRotationAxis(Rotate.X_AXIS);
+		camera.setRotate(-45);
+
+		 /*ВИД СБОКУ
+		camera.setTranslateZ(-5000);
+		camera.setTranslateY(0);
+		camera.setTranslateX(400);
+		 */
+
+		Group group = new Group();
+		group.getChildren().addAll(GroundBox);
+		Scene scene = new Scene(group,800,800);
+
+		scene.setCamera(camera);
+		stage.setScene(scene);
+		stage.show();
+	}
+};
+
+
+
